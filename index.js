@@ -119,7 +119,7 @@
     window.MobileSelect = function (config) {
         extend(this, {
             title: '请选择',   //标题
-            duration: 40,   //缓冲动画过程的帧数
+            duration: 60,   //缓冲动画过程的帧数
             immediateSync: false,   //滑动父列时，是否立即更新子列，false表示等父列滑动停下来后再更新子列
             enable3d: false, //是否开启3d旋转
             spacing: 20    //3d旋转时每个子项之间的角度间距为20deg
@@ -331,7 +331,10 @@
                     //更新值
                     if (!this.immediateSync && t === this.duration || this.immediateSync && pos > -1 && pos < items.length && items[pos].data('value') !== wrapper.data('value')) {
                         wrapper.data('value', items[pos].data('value'));    //更新该列的值
-                        this.cascaded && this.updateColumn(index + 1, this.getChildren(index, pos));     //更新子列
+                        //更新子列或者值
+                        this.cascaded ? this.updateColumn(index + 1, this.getChildren(index, pos)) : this.updateColumn(index + 1, {
+                            options: []
+                        });
                     }
 
                     t < this.duration ? this.rafId = requestAnimationFrame(update) : this.el.data('changing', undefined);
@@ -470,7 +473,7 @@
                         return touch.identifier === this.el.data('touchId');
                     }, this)) {       //同一个触点移除了
                     this.el.data('touchId', undefined);
-                    offset = (speed > 0 ? 1 : -1) * Math.pow(Math.abs(speed), 0.75);
+                    offset = (speed > 0 ? 1 : -1) * Math.pow(Math.abs(speed), 0.8);
 
                     //获取改变量
                     if (this.enable3d) {
