@@ -93,7 +93,7 @@ data为Object时**（级联关系）**如下
 {name}|String|N|-|列名称，没有则不显示列名称
 {options}|Array|Y|-|列数据，每一项为对象
 {options{value}}|String|Y|-|每一项的数据
-{options{children}}|Object** （重复data结构） **|N|-|级联子列的配置，没有则无子列
+{options{children}}|Object**重复data结构**|N|-|级联子列的配置，没有则无子列
 
 例如
 
