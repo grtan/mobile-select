@@ -119,7 +119,7 @@
     window.MobileSelect = function (config) {
         extend(this, {
             title: '请选择',   //标题
-            duration: 60,   //缓冲动画过程的帧数
+            duration: 90,   //缓冲动画过程的帧数
             immediateSync: false,   //滑动父列时，是否立即更新子列，false表示等父列滑动停下来后再更新子列
             enable3d: false, //是否开启3d旋转
             spacing: 20    //3d旋转时每个子项之间的角度间距为20deg
