@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        (function () {
+            var scale = 1 / devicePixelRatio,
+                meta = document.querySelector('meta[name=viewport]'),
+                originalHtmlFontSize;
+
+            function whichTransitionEvent() {
+                var t, el = document.createElement('fakeelement'),
+                    transitions = {
+                        'transition': 'transitionend',
+                        'OTransition': 'oTransitionEnd',
+                        'MozTransition': 'transitionend',
+                        'WebkitTransition': 'webkitTransitionEnd',
+                        'MsTransition': 'msTransitionEnd'
+                    };
+
+                for (t in transitions) {
+                    if (el.style[t] !== undefined) {
+                        return transitions[t];
+                    }
+                }
+            }
+
+            /**
+             * 当调整系统或者浏览器字体大小时，html元素的默认字体大小也会相应变化
+             * 当调整系统字体大小时，webview和某些浏览器会改变文字大小，但某些浏览器的文字大小不受影响，除非在浏览器自身设置里调整文字大小
+             */
+            function updateRem(event) {
+                //排除其他元素的transitionend事件，否则可能出现很诡异的问题，比如页面自动滚到最顶部
+                if (event && event.target !== document.documentElement) {
+                    return;
+                }
+
+                document.documentElement.style.fontSize = '100%';
+                originalHtmlFontSize = parseFloat(getComputedStyle(document.documentElement, null).fontSize);
+
+                /**
+                 * 根据设备宽度调整html元素的font-size属性（即1rem的值）
+                 * 这里设置成html元素初始字体大小的百分比，可以解决调整系统或者浏览器字体大小时页面尺寸也跟着缩放的问题
+                 * 但这里也存在些问题，有可能最终计算出来的fontSize不准确(至少在我们的webview中存在)
+                 */
+                document.documentElement.style.fontSize = document.documentElement.clientWidth * 1000 / (108 * originalHtmlFontSize) + '%';
+            }
+
+            !meta && (meta = document.createElement('meta'));
+            meta.setAttribute('name', 'viewport');
+            meta.setAttribute('content', 'width=device-width,initial-scale=' + scale + ',maximum-scale=' + scale + ',minimum-scale=' + scale + ',user-scalable=no');
+            document.head.appendChild(meta);
+            document.documentElement.style.left = '1em';
+            document.documentElement.style.transition = 'left 30ms';
+            //在ios下会有问题
+//            document.documentElement.addEventListener(whichTransitionEvent(), updateRem);
+            updateRem();
+        }());
+    </script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        button {
+            display: block;
+            margin: 1rem auto;
+            width: 50%;
+        }
+    </style>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<button onclick="select.show()" style="font-size: .4rem">显示</button>
+<script src="modernizr.js"></script>
+<script src="index.js"></script>
+<script>
+    var option = {
+        title: '请选择',
+//        data: function () {
+//            var data=[];
+//
+//            for(var i=0;i<3;i++){
+//                data.push({
+//                    name: 'label'+i,
+//                    options: function () {
+//                        var arr = [], i = 0;
+//
+//                        for (; i < 200; i++) {
+//                            arr.push(i);
+//                        }
+//
+//                        return arr;
+//                    }()
+//                })
+//            }
+//
+//            return data;
+//        }(),
+        data: function () {
+            var num = 3;
+
+            function deep() {
+                var index = arguments[0] || 0,
+                    data = {
+                        name: 'label' + index,
+                        options: []
+                    };
+
+                for (var i = 0; i < 50; i++) {
+                    data.options.push((index < num - 1) && Math.random() > -0.5 ? {
+                        value: index + '-' + (arguments[1] || 0) + '-' + i,
+                        children: deep(index + 1, i)
+                    } : index + '-' + (arguments[1] || 0) + '-' + i);
+                }
+
+                return data;
+            }
+
+            return deep();
+        }(),
+        update: function (value) {
+            console.log('update', value);
+        },
+        confirm: function (value) {
+            console.log('confirm', value);
+        }
+    };
+
+    var select = new MobileSelect(option);
+
+
+//    var select = new MobileSelect({
+//        title: '请选择',
+//        data: function () {
+//            var num = 3;
+//
+//            function deep() {
+//                var index = arguments[0] || 0,
+//                    data = {
+//                        name: 'label' + index,
+//                        options: []
+//                    };
+//
+//                for (var i = 0; i < 50; i++) {
+//                    data.options.push((index < num - 1) && Math.random() > 0.5 ? {
+//                        value: index + '-' + (arguments[1] || 0) + '-' + i,
+//                        children: deep(index + 1, i)
+//                    } : index + '-' + (arguments[1] || 0) + '-' + i);
+//                }
+//
+//                return data;
+//            }
+//
+//            return deep();
+//        }(),
+//        update: function (value) {
+//            console.log('update', value);
+//        },
+//        confirm: function (value) {
+//            console.log('confirm', value);
+//        }
+//    });
+//
+//    select.show();  //显示
+//    select.hide();  //隐藏
+//    select.destroy();  //销毁
+</script>
+</body>
+</html>
