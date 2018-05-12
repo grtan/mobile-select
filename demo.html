@@ -95,7 +95,7 @@
     <div class="value1"></div>
     <button onclick="select2.show()">级联</button>
     <div class="value2"></div>
-    <button onclick="select3.show()">非级联（3d,立即更新）</button>
+    <button onclick="select3.show()">级联（3d）</button>
     <div class="value3"></div>
     <button onclick="select4.show()">级联（3d,立即更新）</button>
     <div class="value4"></div>
@@ -176,8 +176,7 @@
             value2.innerHTML = value.join('&nbsp;&nbsp;&nbsp;');
         }
     }), select3 = new MobileSelect({
-        data: data1,
-        immediateSync: true,
+        data: data2,
         enable3d: true,
         update: function (value) {
             value3.innerHTML = value.join('&nbsp;&nbsp;&nbsp;');
