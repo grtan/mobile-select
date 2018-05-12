@@ -526,7 +526,8 @@
             this.el.addEventListener('click', function (event) {    //点击item
                 var target = event.target, current, offset;
 
-                if (target.classList.contains('mobile-select-item') && !this.el.data('changing')) {
+                if (target.classList.contains('mobile-select-item') && (!this.el.data('changing') || this.el.data('changing') === target.parentElement.parentElement)) {
+                    this.el.data('changing') === target.parentElement.parentElement && this.stopChange();
                     this.el.data('changing', target.parentElement.parentElement);
                     current = this.enable3d ? target.parentElement.rotateX() : target.parentElement.translateY();
                     offset = target.index() * (this.enable3d ? this.spacing : -target.parentElement.offsetHeight) - current;
