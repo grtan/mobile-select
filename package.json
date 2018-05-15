@@ -1,0 +1,17 @@
+{
+  "name": "@vivo/mobile-select",
+  "version": "1.0.0",
+  "description": "mobile picker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mobile",
+    "picker",
+    "select",
+    "selecter"
+  ],
+  "author": "",
+  "license": "MIT"
+}
